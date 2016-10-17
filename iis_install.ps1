@@ -1,6 +1,6 @@
 # eastmoney public tools
-# version: v1.0.2
-# create by XuHoo, 2016-9-27
+# version: v1.0.3
+# create by XuHoo, 2016-10-14
 #
 
 
@@ -15,6 +15,9 @@ catch {
 $packages_path = "D:\software"  # Packages storage directory
 
 function Download() {
+    $port = port
+    $ip = "address"
+    $url = "http://address"
     $isExists = Test-Path $packages_path
     if(!$isExists) {
         New-Item -ItemType Directory $packages_path
@@ -22,10 +25,10 @@ function Download() {
     # instantiate a socket object,
     # Try connect to download the source
     $testConn = New-Object Net.Sockets.TcpClient
-    $testConn.Connect("$address", 80)  # $address need to custom
+    $testConn.Connect("$ip", $port)  # $address need to custom
     if($testConn) {
-        Start-BitsTransfer $address/dotnet4.0.exe $packages_path
-        Start-BitsTransfer $address/dotnet4.5.exe $packages_path
+        Start-BitsTransfer $url/dotnet4.0.exe $packages_path
+        Start-BitsTransfer $url/dotnet4.5.exe $packages_path
         return $true
     } else {
         return $false
@@ -94,6 +97,7 @@ try {
     $chkUp_result = Update
     if($chkUp_result) {
         Install; Registry
+        shutdown -r -t 0
     } else {
         Write-Warning "Update .NET Framework error."
     }
